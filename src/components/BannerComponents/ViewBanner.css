@@ -1,0 +1,96 @@
+/* ViewBanner.css  */
+.banner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px;
+}
+
+.banner-card {
+  background-color: #ffffff;
+  color: #000;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  width: 100%;
+  text-align: center;
+}
+
+.banner-text {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.banner-button-text {
+  font-size: 1.2rem;
+  margin-top: 10px;
+  color: #007bff;
+}
+
+.consent-categories {
+  margin-top: 20px;
+}
+
+.categories-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.category-item {
+  margin-bottom: 10px;
+  font-size: 1rem;
+}
+
+.category-status {
+  font-size: 0.9rem;
+  margin-top: 5px;
+}
+
+.status.accepted {
+  color: green;
+}
+
+.status.declined {
+  color: red;
+}
+
+.links p {
+  margin-top: 10px;
+}
+
+.policy-link,
+.terms-link {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.policy-link:hover,
+.terms-link:hover {
+  text-decoration: underline;
+}
+
+.action-button-container {
+  margin-top: 20px;
+}
+
+.action-button {
+  padding: 12px 30px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.action-button:hover {
+  background-color: #0056b3;
+}
+
+.loading,
+.error,
+.not-found {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #333;
+}

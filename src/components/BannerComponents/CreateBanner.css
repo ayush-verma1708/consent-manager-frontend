@@ -1,0 +1,113 @@
+/* Styling for the multiple select dropdown */
+.languages-select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+  min-height: 120px;
+  resize: vertical;
+  outline: none;
+}
+
+/* Custom styling for selected languages list */
+.selected-languages {
+  margin-top: 15px;
+}
+
+.selected-languages ul {
+  list-style: none;
+  padding: 0;
+}
+
+.selected-languages .selected-language {
+  display: inline-block;
+  background-color: #f0f0f0;
+  color: #333;
+  margin-right: 10px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  margin-bottom: 5px;
+  font-size: 0.9rem;
+}
+
+.selected-languages .remove-icon {
+  margin-left: 5px;
+  cursor: pointer;
+  color: #e74c3c;
+  font-size: 1.1rem;
+}
+
+.selected-languages .remove-icon:hover {
+  color: #c0392b;
+}
+
+/* Styling for the form */
+.create-banner-form {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Form sections */
+.form-section {
+  margin-bottom: 20px;
+}
+
+.form-section label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.form-section input,
+.form-section select,
+.form-section textarea {
+  width: 100%;
+  padding: 8px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.submit-btn,
+.preview-btn {
+  padding: 10px 20px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.submit-btn:hover,
+.preview-btn:hover {
+  background-color: #45a049;
+}
+
+.add-category-btn {
+  background-color: #3498db;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.remove-category-btn {
+  background-color: #e74c3c;
+  color: white;
+  padding: 5px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}

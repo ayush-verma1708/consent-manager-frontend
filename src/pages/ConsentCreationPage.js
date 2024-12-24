@@ -1,161 +1,130 @@
 import React, { useState } from 'react';
-import BannerCustomization from '../components/BannerCreationComponents/BannerCustomization';
-import PreviewBanner from '../components/BannerCreationComponents/PreviewBanner';
-import PredefinedTemplates from '../components/BannerCreationComponents/PredefinedTemplates';
+import axios from 'axios';
+import CreateBanner from '../components/BannerComponents/BannerCreate.js';
+import BannerPreview from '../components/BannerComponents/BannerPreview.js';
+import DemoTemplates from '../components/BannerComponents/DemoTemplates.js';
 
-// Import the API functions
-import { saveBanner } from '../api/BannerApi';
-
-import 'bootstrap/dist/css/bootstrap.min.css';
-
-const ConsentCreationPage = () => {
-  const [bannerConfig, setBannerConfig] = useState({
+const ConsentCreation = () => {
+  const [bannerData, setBannerData] = useState({
     text: '',
     buttonText: '',
     backgroundColor: '#ffffff',
     textColor: '#000000',
     buttonColor: '#007bff',
-    consentCategories: [],
+    languages: ['English'],
+    consentCategories: [
+      {
+        title: '',
+        description: '',
+        yesOrNo: false,
+        reason: '',
+        consentType: 'accepted',
+      },
+    ],
     privacyPolicyLink: '',
     termsLink: '',
     consentExpiry: 30,
     granularity: false,
   });
 
-  const [preview, setPreview] = useState(false);
+  const [previewBanner, setPreviewBanner] = useState(null);
 
-  // Function to save the banner configuration using the API
-  const handleSave = async () => {
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setBannerData({ ...bannerData, [name]: value });
+  };
+
+  const handleConsentCategoryChange = (index, field, value) => {
+    const updatedCategories = [...bannerData.consentCategories];
+    updatedCategories[index][field] = value;
+    setBannerData({ ...bannerData, consentCategories: updatedCategories });
+  };
+
+  const addConsentCategory = () => {
+    setBannerData({
+      ...bannerData,
+      consentCategories: [
+        ...bannerData.consentCategories,
+        {
+          title: '',
+          description: '',
+          yesOrNo: false,
+          reason: '',
+          consentType: 'accepted',
+        },
+      ],
+    });
+  };
+
+  const removeConsentCategory = (index) => {
+    const updatedCategories = bannerData.consentCategories.filter(
+      (_, i) => i !== index
+    );
+    setBannerData({ ...bannerData, consentCategories: updatedCategories });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     try {
-      const response = await saveBanner(bannerConfig);
-
-      if (response.success) {
-        alert('Banner saved successfully!');
-        console.log('Banner Saved:', bannerConfig);
-      } else {
-        alert('Error saving banner');
-      }
+      const response = await axios.post('/api/banners', bannerData);
+      alert(`Banner created successfully: ${response.data.message}`);
+      setBannerData({
+        text: '',
+        buttonText: '',
+        backgroundColor: '#ffffff',
+        textColor: '#000000',
+        buttonColor: '#007bff',
+        languages: ['English'],
+        consentCategories: [
+          {
+            title: '',
+            description: '',
+            yesOrNo: false,
+            reason: '',
+            consentType: 'accepted',
+          },
+        ],
+        privacyPolicyLink: '',
+        termsLink: '',
+        consentExpiry: 30,
+        granularity: false,
+      });
+      setPreviewBanner(null);
     } catch (error) {
-      alert('Error saving banner');
-      console.error('Error:', error);
+      alert(
+        `Error creating banner: ${
+          error.response?.data?.message || error.message
+        }`
+      );
     }
   };
 
-  // Function to toggle preview mode
-  const handlePreview = () => {
-    setPreview(true);
+  const generatePreview = () => {
+    setPreviewBanner({ ...bannerData });
+  };
+
+  const handleTemplateSelect = (template) => {
+    setBannerData({ ...template });
+    setPreviewBanner({ ...template });
   };
 
   return (
-    <div className='container my-4'>
-      <h1 className='text-center mb-4'>Create Your Consent Banner</h1>
-
-      {/* Predefined Templates */}
-      <PredefinedTemplates setBannerConfig={setBannerConfig} />
-
-      {/* Banner Customization */}
-      <BannerCustomization
-        bannerConfig={bannerConfig}
-        setBannerConfig={setBannerConfig}
+    <div className='consent-creation-page'>
+      <h2>Create New Consent Banner</h2>
+      <DemoTemplates onSelectTemplate={handleTemplateSelect} />
+      <CreateBanner
+        bannerData={bannerData}
+        setBannerData={setBannerData}
+        handleInputChange={handleInputChange}
+        handleConsentCategoryChange={handleConsentCategoryChange}
+        addConsentCategory={addConsentCategory}
+        removeConsentCategory={removeConsentCategory}
+        handleSubmit={handleSubmit}
+        generatePreview={generatePreview}
       />
-
-      {/* Action Buttons */}
-      <div className='d-flex justify-content-between'>
-        <button onClick={handlePreview} className='btn btn-secondary'>
-          Preview Banner
-        </button>
-        <button onClick={handleSave} className='btn btn-primary'>
-          Save Banner
-        </button>
-      </div>
-
-      {/* Preview the Banner */}
-      {preview && <PreviewBanner bannerConfig={bannerConfig} />}
+      <BannerPreview previewData={previewBanner} />
     </div>
   );
 };
 
-export default ConsentCreationPage;
-
-// import React, { useState } from 'react';
-// import BannerCustomization from '../components/BannerComponents/BannerCustomization';
-// import PreviewBanner from '../components/BannerComponents/PreviewBanner';
-// import PredefinedTemplates from '../components/BannerComponents/PredefinedTemplates';
-
-// // Import the API functions
-// import { saveBanner } from '../api/BannerApi';
-
-// import 'bootstrap/dist/css/bootstrap.min.css';
-
-// const ConsentCreationPage = () => {
-//   const [bannerConfig, setBannerConfig] = useState({
-//     text: '',
-//     buttonText: '',
-//     backgroundColor: '#ffffff',
-//     textColor: '#000000',
-//     buttonColor: '#007bff',
-//     consentCategories: [],
-//     languages: ['en', 'hi'],
-//     privacyPolicyLink: '',
-//     termsLink: '',
-//     consentExpiry: 30,
-//     granularity: false,
-//   });
-
-//   const [preview, setPreview] = useState(false);
-
-//   // Function to save the banner configuration using the API
-//   const handleSave = async () => {
-//     try {
-//       console.log('Sending banner config:', bannerConfig);
-//       const response = await saveBanner(bannerConfig);
-
-//       if (response.success) {
-//         alert('Banner saved successfully!');
-//       } else {
-//         alert('Error saving banner');
-//       }
-//     } catch (error) {
-//       alert('Error saving banner');
-//       console.error(
-//         'Error:',
-//         error.response ? error.response.data : error.message
-//       );
-//     }
-//   };
-
-//   // Function to toggle preview mode
-//   const handlePreview = () => {
-//     setPreview(true);
-//   };
-
-//   return (
-//     <div className='container my-4'>
-//       <h1 className='text-center mb-4'>Create Your Consent Banner</h1>
-
-//       {/* Predefined Templates */}
-//       <PredefinedTemplates setBannerConfig={setBannerConfig} />
-
-//       {/* Banner Customization */}
-//       <BannerCustomization
-//         bannerConfig={bannerConfig}
-//         setBannerConfig={setBannerConfig}
-//       />
-
-//       {/* Action Buttons */}
-//       <div className='d-flex justify-content-between'>
-//         <button onClick={handlePreview} className='btn btn-secondary'>
-//           Preview Banner
-//         </button>
-//         <button onClick={handleSave} className='btn btn-primary'>
-//           Save Banner
-//         </button>
-//       </div>
-
-//       {/* Preview the Banner */}
-//       {preview && <PreviewBanner bannerConfig={bannerConfig} />}
-//     </div>
-//   );
-// };
-
-// export default ConsentCreationPage;
+export default ConsentCreation;

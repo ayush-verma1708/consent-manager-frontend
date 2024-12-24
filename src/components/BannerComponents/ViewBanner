@@ -1,0 +1,368 @@
+import React, { useEffect, useState } from 'react';
+import { fetchBanners } from '../api/BannerApi';
+import './ViewBanner.css'; // Correctly import CSS for styling
+
+const ViewBanner = ({ bannerId }) => {
+  const [bannerData, setBannerData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const getBanner = async () => {
+      try {
+        setLoading(true);
+        const response = await fetchBanners(bannerId);
+
+        if (response.success && response.banner) {
+          setBannerData(response.banner);
+        } else {
+          setError('Failed to retrieve banner data.');
+        }
+      } catch (err) {
+        setError(err.message || 'Error fetching banner data.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    getBanner();
+  }, [bannerId]);
+
+  if (loading) {
+    return <div className='loading'>Loading banner...</div>;
+  }
+
+  if (error) {
+    return <div className='error'>Error: {error}</div>;
+  }
+
+  if (!bannerData) {
+    return <div className='not-found'>Banner not found.</div>;
+  }
+
+  return (
+    <div className='banner-container'>
+      <div
+        className='banner-card'
+        style={{
+          backgroundColor: bannerData.backgroundColor,
+          color: bannerData.textColor,
+        }}
+      >
+        <h3 className='banner-text'>{bannerData.text}</h3>
+        <p className='banner-button-text'>{bannerData.buttonText}</p>
+
+        {/* Consent Categories */}
+        {bannerData.consentCategories.length > 0 && (
+          <div className='consent-categories'>
+            <h4>Consent Categories:</h4>
+            <ul className='categories-list'>
+              {bannerData.consentCategories.map((category) => (
+                <li key={category._id} className='category-item'>
+                  <strong>{category.title}:</strong> {category.description}
+                  <div className='category-status'>
+                    <span
+                      className={`status ${
+                        category.yesOrNo ? 'accepted' : 'declined'
+                      }`}
+                    >
+                      {category.yesOrNo ? 'Accepted' : 'Declined'}
+                    </span>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {/* Links */}
+        <div className='links'>
+          {bannerData.privacyPolicyLink && (
+            <p>
+              <a
+                href={bannerData.privacyPolicyLink}
+                target='_blank'
+                rel='noopener noreferrer'
+                style={{ color: bannerData.buttonColor }}
+                className='policy-link'
+              >
+                Privacy Policy
+              </a>
+            </p>
+          )}
+          {bannerData.termsLink && (
+            <p>
+              <a
+                href={bannerData.termsLink}
+                target='_blank'
+                rel='noopener noreferrer'
+                style={{ color: bannerData.buttonColor }}
+                className='terms-link'
+              >
+                Terms of Service
+              </a>
+            </p>
+          )}
+        </div>
+
+        {/* Action Button */}
+        <div className='action-button-container'>
+          <button
+            className='action-button'
+            style={{
+              backgroundColor: bannerData.buttonColor,
+              color: '#fff',
+            }}
+          >
+            {bannerData.buttonText}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default ViewBanner;
+
+// import React, { useEffect, useState } from 'react';
+// import { fetchBanners } from '../api/BannerApi';
+// // import './ViewBanner.css'; // Add a separate CSS file for styles
+
+// const ViewBanner = ({ bannerId }) => {
+//   const [bannerData, setBannerData] = useState(null);
+//   const [loading, setLoading] = useState(true);
+//   const [error, setError] = useState(null);
+
+//   useEffect(() => {
+//     const getBanner = async () => {
+//       try {
+//         setLoading(true);
+//         const response = await fetchBanners(bannerId);
+
+//         if (response.success && response.banner) {
+//           setBannerData(response.banner);
+//         } else {
+//           setError('Failed to retrieve banner data.');
+//         }
+//       } catch (err) {
+//         setError(err.message || 'Error fetching banner data.');
+//       } finally {
+//         setLoading(false);
+//       }
+//     };
+
+//     getBanner();
+//   }, [bannerId]);
+
+//   if (loading) {
+//     return <div className='loading'>Loading banner...</div>;
+//   }
+
+//   if (error) {
+//     return <div className='error'>Error: {error}</div>;
+//   }
+
+//   if (!bannerData) {
+//     return <div className='not-found'>Banner not found.</div>;
+//   }
+
+//   return (
+//     <div className='banner-container'>
+//       <div
+//         className='banner-card'
+//         style={{
+//           backgroundColor: bannerData.backgroundColor,
+//           color: bannerData.textColor,
+//         }}
+//       >
+//         <h3 className='banner-text'>{bannerData.text}</h3>
+//         <p className='banner-button-text'>{bannerData.buttonText}</p>
+
+//         {/* Consent Categories */}
+//         {bannerData.consentCategories.length > 0 && (
+//           <div className='consent-categories'>
+//             <h4>Consent Categories:</h4>
+//             <ul className='categories-list'>
+//               {bannerData.consentCategories.map((category) => (
+//                 <li key={category._id} className='category-item'>
+//                   <strong>{category.title}:</strong> {category.description}
+//                   <div className='category-status'>
+//                     <span
+//                       className={`status ${
+//                         category.yesOrNo ? 'accepted' : 'declined'
+//                       }`}
+//                     >
+//                       {category.yesOrNo ? 'Accepted' : 'Declined'}
+//                     </span>
+//                   </div>
+//                 </li>
+//               ))}
+//             </ul>
+//           </div>
+//         )}
+
+//         {/* Links */}
+//         <div className='links'>
+//           {bannerData.privacyPolicyLink && (
+//             <p>
+//               <a
+//                 href={bannerData.privacyPolicyLink}
+//                 target='_blank'
+//                 rel='noopener noreferrer'
+//                 style={{ color: bannerData.buttonColor }}
+//                 className='policy-link'
+//               >
+//                 Privacy Policy
+//               </a>
+//             </p>
+//           )}
+//           {bannerData.termsLink && (
+//             <p>
+//               <a
+//                 href={bannerData.termsLink}
+//                 target='_blank'
+//                 rel='noopener noreferrer'
+//                 style={{ color: bannerData.buttonColor }}
+//                 className='terms-link'
+//               >
+//                 Terms of Service
+//               </a>
+//             </p>
+//           )}
+//         </div>
+
+//         {/* Action Button */}
+//         <div className='action-button-container'>
+//           <button
+//             className='action-button'
+//             style={{
+//               backgroundColor: bannerData.buttonColor,
+//               color: '#fff',
+//             }}
+//           >
+//             {bannerData.buttonText}
+//           </button>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default ViewBanner;
+
+// // import React, { useEffect, useState } from 'react';
+// // import { fetchBanners } from '../api/BannerApi';
+
+// // // bannerId = '60f1b0b3b3f1f40015f6f3b1';
+// // const ViewBanner = (bannerId) => {
+// //   const [bannerData, setBannerData] = useState(null);
+// //   const [loading, setLoading] = useState(true);
+// //   const [error, setError] = useState(null);
+
+// //   useEffect(() => {
+// //     const getBanner = async () => {
+// //       try {
+// //         setLoading(true);
+// //         const response = await fetchBanners(bannerId);
+
+// //         if (response.success && response.banner) {
+// //           setBannerData(response.banner);
+// //         } else {
+// //           setError('Failed to retrieve banner data.');
+// //         }
+// //       } catch (err) {
+// //         setError(err.message || 'Error fetching banner data.');
+// //       } finally {
+// //         setLoading(false);
+// //       }
+// //     };
+
+// //     getBanner();
+// //   }, [bannerId]);
+
+// //   if (loading) {
+// //     return <div>Loading banner...</div>;
+// //   }
+
+// //   if (error) {
+// //     return <div>Error: {error}</div>;
+// //   }
+
+// //   if (!bannerData) {
+// //     return <div>Banner not found.</div>;
+// //   }
+
+// //   return (
+// //     <div
+// //       style={{
+// //         backgroundColor: bannerData.backgroundColor,
+// //         color: bannerData.textColor,
+// //         padding: '20px',
+// //         borderRadius: '8px',
+// //         textAlign: 'center',
+// //         maxWidth: '600px',
+// //         margin: '0 auto',
+// //         boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+// //       }}
+// //     >
+// //       <h3>{bannerData.text}</h3>
+// //       <p>{bannerData.buttonText}</p>
+
+// //       {/* Consent Categories */}
+// //       {bannerData.consentCategories.length > 0 && (
+// //         <div>
+// //           <h4>Consent Categories:</h4>
+// //           <ul style={{ listStyleType: 'none', padding: 0 }}>
+// //             {bannerData.consentCategories.map((category) => (
+// //               <li key={category._id}>
+// //                 <strong>{category.title}:</strong> {category.description}
+// //               </li>
+// //             ))}
+// //           </ul>
+// //         </div>
+// //       )}
+
+// //       {/* Links */}
+// //       {bannerData.privacyPolicyLink && (
+// //         <p>
+// //           <a
+// //             href={bannerData.privacyPolicyLink}
+// //             target='_blank'
+// //             rel='noopener noreferrer'
+// //             style={{ color: bannerData.buttonColor }}
+// //           >
+// //             Privacy Policy
+// //           </a>
+// //         </p>
+// //       )}
+// //       {bannerData.termsLink && (
+// //         <p>
+// //           <a
+// //             href={bannerData.termsLink}
+// //             target='_blank'
+// //             rel='noopener noreferrer'
+// //             style={{ color: bannerData.buttonColor }}
+// //           >
+// //             Terms of Service
+// //           </a>
+// //         </p>
+// //       )}
+
+// //       {/* Action Button */}
+// //       <button
+// //         style={{
+// //           backgroundColor: bannerData.buttonColor,
+// //           color: '#fff',
+// //           border: 'none',
+// //           padding: '10px 20px',
+// //           borderRadius: '4px',
+// //           cursor: 'pointer',
+// //         }}
+// //       >
+// //         {bannerData.buttonText}
+// //       </button>
+// //     </div>
+// //   );
+// // };
+
+// // export default ViewBanner;
