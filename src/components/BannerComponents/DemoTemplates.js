@@ -47,7 +47,7 @@ const demoTemplates = [
       backgroundColor: '#ffebee',
       textColor: '#d32f2f',
       buttonColor: '#b71c1c',
-      languages: ['English', 'Spanish'],
+      languages: ['English', 'Malayalam'],
       consentCategories: [
         {
           title: 'Marketing Cookies',
@@ -100,7 +100,7 @@ const demoTemplates = [
       backgroundColor: '#fff3e0',
       textColor: '#f57c00',
       buttonColor: '#e65100',
-      languages: ['English', 'French'],
+      languages: ['English', 'Hindi'],
       consentCategories: [
         {
           title: 'Shopping Preferences',
@@ -127,7 +127,7 @@ const demoTemplates = [
       backgroundColor: '#e3f2fd',
       textColor: '#1565c0',
       buttonColor: '#0d47a1',
-      languages: ['English', 'German'],
+      languages: ['English', 'Punjabi'],
       consentCategories: [
         {
           title: 'Security Cookies',
