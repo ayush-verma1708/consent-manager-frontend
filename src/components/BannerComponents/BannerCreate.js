@@ -1,8 +1,9 @@
 import React from 'react';
-import './CreateBanner.css'; // External CSS for styling
+import './CreateBanner.css';
+import LanguageSelector from './LanguageSelector';
 
 const CreateBanner = ({
-  bannerData = {}, // Fallback to an empty object
+  bannerData = {},
   setBannerData,
   handleInputChange,
   handleConsentCategoryChange,
@@ -11,201 +12,121 @@ const CreateBanner = ({
   handleSubmit,
   generatePreview,
 }) => {
-  const {
-    languages = [], // Ensure languages is always an array
-    consentCategories = [], // Ensure consentCategories is always an array
-  } = bannerData;
+  const { consentCategories = [], languages = [] } = bannerData;
 
   const availableLanguages = [
-    'Hindi',
-    'English',
-    'Bengali',
-    'Telugu',
-    'Marathi',
-    'Tamil',
-    'Gujarati',
-    'Urdu',
-    'Kannada',
-    'Odia',
-    'Malayalam',
-    'Punjabi',
-    'Assamese',
-    'Maithili',
-    'Santali',
-    'Kashmiri',
-    'Nepali',
-    'Sindhi',
-    'Dogri',
-    'Konkani',
-    'Bodo',
-    'Manipuri',
+    { name: 'Hindi', code: 'hi' },
+    { name: 'English', code: 'en' },
+    { name: 'Bengali', code: 'bn' },
+    { name: 'Telugu', code: 'te' },
+    { name: 'Marathi', code: 'mr' },
+    { name: 'Tamil', code: 'ta' },
+    { name: 'Gujarati', code: 'gu' },
+    { name: 'Urdu', code: 'ur' },
+    { name: 'Kannada', code: 'kn' },
+    { name: 'Odia', code: 'or' },
+    { name: 'Malayalam', code: 'ml' },
+    { name: 'Punjabi', code: 'pa' },
+    { name: 'Assamese', code: 'as' },
+    { name: 'Maithili', code: 'mai' },
+    { name: 'Santali', code: 'sat' },
+    { name: 'Kashmiri', code: 'ks' },
+    { name: 'Nepali', code: 'ne' },
+    { name: 'Sindhi', code: 'sd' },
+    { name: 'Dogri', code: 'doi' },
+    { name: 'Konkani', code: 'kok' },
+    { name: 'Bodo', code: 'brx' },
+    { name: 'Manipuri', code: 'mni' },
   ];
 
-  const handleLanguageSelection = (lang) => {
-    if (!languages.includes(lang)) {
-      setBannerData({
-        ...bannerData,
-        languages: [...languages, lang],
-      });
-    }
+  const updateLanguages = (selectedLanguages) => {
+    setBannerData((prevData) => ({
+      ...prevData,
+      languages: selectedLanguages,
+    }));
   };
 
-  const handleRemoveLanguage = (lang) => {
-    setBannerData({
-      ...bannerData,
-      languages: languages.filter((language) => language !== lang),
-    });
-  };
+  const formFields = [
+    {
+      label: 'Text',
+      name: 'text',
+      type: 'text',
+      placeholder: 'Enter banner text',
+      required: true,
+    },
+    {
+      label: 'Button Text',
+      name: 'buttonText',
+      type: 'text',
+      placeholder: 'Enter button text',
+      required: true,
+    },
+    {
+      label: 'Background Color',
+      name: 'backgroundColor',
+      type: 'color',
+    },
+    {
+      label: 'Text Color',
+      name: 'textColor',
+      type: 'color',
+    },
+    {
+      label: 'Button Color',
+      name: 'buttonColor',
+      type: 'color',
+    },
+    {
+      label: 'Privacy Policy Link',
+      name: 'privacyPolicyLink',
+      type: 'url',
+      placeholder: 'Enter URL',
+    },
+    {
+      label: 'Terms Link',
+      name: 'termsLink',
+      type: 'url',
+      placeholder: 'Enter URL',
+    },
+    {
+      label: 'Consent Expiry (days)',
+      name: 'consentExpiry',
+      type: 'number',
+    },
+  ];
 
   return (
-    <form className='create-banner-form' onSubmit={handleSubmit}>
+    <form className='create-banner-form'>
       <h2>Create Banner</h2>
-      <div className='form-section'>
-        <label>Text:</label>
-        <input
-          type='text'
-          name='text'
-          value={bannerData.text}
-          onChange={handleInputChange}
-          required
-          placeholder='Enter banner text'
-        />
-      </div>
 
-      <div className='form-section'>
-        <label>Button Text:</label>
-        <input
-          type='text'
-          name='buttonText'
-          value={bannerData.buttonText}
-          onChange={handleInputChange}
-          required
-          placeholder='Enter button text'
-        />
-      </div>
-
-      <div className='form-section'>
-        <label>Background Color:</label>
-        <input
-          type='color'
-          name='backgroundColor'
-          value={bannerData.backgroundColor}
-          onChange={handleInputChange}
-        />
-      </div>
-
-      <div className='form-section'>
-        <label>Text Color:</label>
-        <input
-          type='color'
-          name='textColor'
-          value={bannerData.textColor}
-          onChange={handleInputChange}
-        />
-      </div>
-
-      <div className='form-section'>
-        <label>Button Color:</label>
-        <input
-          type='color'
-          name='buttonColor'
-          value={bannerData.buttonColor}
-          onChange={handleInputChange}
-        />
-      </div>
-
-      <div className='form-section'>
-        <label>Languages:</label>
-        <select
-          name='languages'
-          multiple
-          value={languages}
-          onChange={(e) => {
-            const selectedLanguages = [...e.target.selectedOptions].map(
-              (o) => o.value
-            );
-            setBannerData({
-              ...bannerData,
-              languages: selectedLanguages,
-            });
-          }}
-          className='languages-select'
-        >
-          {availableLanguages.map((lang) => (
-            <option
-              key={lang}
-              value={lang}
-              onDoubleClick={() => handleLanguageSelection(lang)}
-            >
-              {lang}
-            </option>
-          ))}
-        </select>
-
-        {/* Display selected languages below */}
-        <div className='selected-languages'>
-          {languages.length > 0 && (
-            <ul>
-              {languages.map((lang) => (
-                <li key={lang} className='selected-language'>
-                  {lang}
-                  <span
-                    className='remove-icon'
-                    onClick={() => handleRemoveLanguage(lang)}
-                  >
-                    ✖
-                  </span>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-      </div>
-
-      <div className='form-section'>
-        <label>Privacy Policy Link:</label>
-        <input
-          type='url'
-          name='privacyPolicyLink'
-          value={bannerData.privacyPolicyLink}
-          onChange={handleInputChange}
-          placeholder='Enter URL'
-        />
-      </div>
-
-      <div className='form-section'>
-        <label>Terms Link:</label>
-        <input
-          type='url'
-          name='termsLink'
-          value={bannerData.termsLink}
-          onChange={handleInputChange}
-          placeholder='Enter URL'
-        />
-      </div>
-
-      <div className='form-section'>
-        <label>Consent Expiry (days):</label>
-        <input
-          type='number'
-          name='consentExpiry'
-          value={bannerData.consentExpiry}
-          onChange={handleInputChange}
-        />
-      </div>
-
-      <div className='form-section'>
-        <label>
-          Granularity:
+      {formFields.map((field, index) => (
+        <div className='form-section' key={index}>
+          <label>{field.label}:</label>
           <input
-            type='checkbox'
-            name='granularity'
-            checked={bannerData.granularity}
-            onChange={(e) =>
-              setBannerData({ ...bannerData, granularity: e.target.checked })
-            }
+            type={field.type}
+            name={field.name}
+            value={bannerData[field.name] || ''}
+            onChange={handleInputChange}
+            placeholder={field.placeholder}
+            required={field.required}
           />
-        </label>
+        </div>
+      ))}
+
+      <div className='form-section'>
+        <LanguageSelector
+          availableLanguages={availableLanguages}
+          selectedLanguages={languages}
+          onChange={updateLanguages}
+        />
+        {/* <div>
+          <h3>Selected Languages:</h3>
+          <ul>
+            {languages.map((lang) => (
+              <li key={lang}>{lang}</li>
+            ))}
+          </ul>
+        </div> */}
       </div>
 
       <div className='form-section'>
@@ -221,7 +142,7 @@ const CreateBanner = ({
             <input
               type='text'
               placeholder='Title'
-              value={category.title}
+              value={category.title || ''}
               onChange={(e) =>
                 handleConsentCategoryChange(index, 'title', e.target.value)
               }
@@ -229,7 +150,7 @@ const CreateBanner = ({
             />
             <textarea
               placeholder='Description'
-              value={category.description}
+              value={category.description || ''}
               onChange={(e) =>
                 handleConsentCategoryChange(
                   index,
@@ -243,7 +164,7 @@ const CreateBanner = ({
               Yes or No:
               <input
                 type='checkbox'
-                checked={category.yesOrNo}
+                checked={category.yesOrNo || false}
                 onChange={(e) =>
                   handleConsentCategoryChange(
                     index,
@@ -256,7 +177,7 @@ const CreateBanner = ({
             <input
               type='text'
               placeholder='Reason'
-              value={category.reason}
+              value={category.reason || ''}
               onChange={(e) =>
                 handleConsentCategoryChange(index, 'reason', e.target.value)
               }
@@ -274,7 +195,7 @@ const CreateBanner = ({
       </div>
 
       <div className='form-actions'>
-        <button type='submit' className='submit-btn'>
+        <button type='submit' onClick={handleSubmit} className='submit-btn'>
           Submit
         </button>
         <button type='button' onClick={generatePreview} className='preview-btn'>
@@ -286,3 +207,214 @@ const CreateBanner = ({
 };
 
 export default CreateBanner;
+
+// import React from 'react';
+// import './CreateBanner.css'; // External CSS for styling
+// import LanguageSelector from './LanguageSelector'; // Import the LanguageSelector component
+
+// const CreateBanner = ({
+//   bannerData = {}, // Fallback to an empty object
+//   setBannerData,
+//   handleInputChange,
+//   handleConsentCategoryChange,
+//   addConsentCategory,
+//   removeConsentCategory,
+//   handleSubmit,
+//   generatePreview,
+// }) => {
+//   const {
+//     consentCategories = [], // Ensure consentCategories is always an array
+//   } = bannerData;
+//   const [languages, setLanguages] = React.useState([]);
+
+//   const availableLanguages = [
+//     { name: 'Hindi', code: 'hi' },
+//     { name: 'English', code: 'en' },
+//     { name: 'Bengali', code: 'bn' },
+//     { name: 'Telugu', code: 'te' },
+//     { name: 'Marathi', code: 'mr' },
+//     { name: 'Tamil', code: 'ta' },
+//     { name: 'Gujarati', code: 'gu' },
+//     { name: 'Urdu', code: 'ur' },
+//     { name: 'Kannada', code: 'kn' },
+//     { name: 'Odia', code: 'or' },
+//     { name: 'Malayalam', code: 'ml' },
+//     { name: 'Punjabi', code: 'pa' },
+//     { name: 'Assamese', code: 'as' },
+//     { name: 'Maithili', code: 'mai' },
+//     { name: 'Santali', code: 'sat' },
+//     { name: 'Kashmiri', code: 'ks' },
+//     { name: 'Nepali', code: 'ne' },
+//     { name: 'Sindhi', code: 'sd' },
+//     { name: 'Dogri', code: 'doi' },
+//     { name: 'Konkani', code: 'kok' },
+//     { name: 'Bodo', code: 'brx' },
+//     { name: 'Manipuri', code: 'mni' },
+//   ];
+
+//   const formFields = [
+//     {
+//       label: 'Text',
+//       name: 'text',
+//       type: 'text',
+//       placeholder: 'Enter banner text',
+//       required: true,
+//     },
+//     {
+//       label: 'Button Text',
+//       name: 'buttonText',
+//       type: 'text',
+//       placeholder: 'Enter button text',
+//       required: true,
+//     },
+//     {
+//       label: 'Background Color',
+//       name: 'backgroundColor',
+//       type: 'color',
+//     },
+//     {
+//       label: 'Text Color',
+//       name: 'textColor',
+//       type: 'color',
+//     },
+//     {
+//       label: 'Button Color',
+//       name: 'buttonColor',
+//       type: 'color',
+//     },
+//     {
+//       label: 'Privacy Policy Link',
+//       name: 'privacyPolicyLink',
+//       type: 'url',
+//       placeholder: 'Enter URL',
+//     },
+//     {
+//       label: 'Terms Link',
+//       name: 'termsLink',
+//       type: 'url',
+//       placeholder: 'Enter URL',
+//     },
+//     {
+//       label: 'Consent Expiry (days)',
+//       name: 'consentExpiry',
+//       type: 'number',
+//     },
+//   ];
+
+//   return (
+//     <form className='create-banner-form'>
+//       <h2>Create Banner</h2>
+
+//       {/* Dynamic Form Fields */}
+//       {formFields.map((field, index) => (
+//         <div className='form-section' key={index}>
+//           <label>{field.label}:</label>
+//           <input
+//             type={field.type}
+//             name={field.name}
+//             value={bannerData[field.name]}
+//             onChange={handleInputChange}
+//             placeholder={field.placeholder}
+//             required={field.required}
+//           />
+//         </div>
+//       ))}
+
+//       {/* Languages Section */}
+//       <div className='form-section'>
+//         <h1>Language Selector</h1>
+//         <LanguageSelector
+//           availableLanguages={availableLanguages}
+//           selectedLanguages={languages}
+//           onChange={setLanguages}
+//         />
+//         <div>
+//           <h3>Selected Languages:</h3>
+//           <ul>
+//             {languages.map((lang) => (
+//               <li key={lang}>{lang}</li>
+//             ))}
+//           </ul>
+//         </div>
+//       </div>
+
+//       {/* Consent Categories */}
+//       <div className='form-section'>
+//         <button
+//           type='button'
+//           onClick={addConsentCategory}
+//           className='add-category-btn'
+//         >
+//           Add Consent Category
+//         </button>
+//         {consentCategories.map((category, index) => (
+//           <div key={index} className='consent-category'>
+//             <input
+//               type='text'
+//               placeholder='Title'
+//               value={category.title}
+//               onChange={(e) =>
+//                 handleConsentCategoryChange(index, 'title', e.target.value)
+//               }
+//               required
+//             />
+//             <textarea
+//               placeholder='Description'
+//               value={category.description}
+//               onChange={(e) =>
+//                 handleConsentCategoryChange(
+//                   index,
+//                   'description',
+//                   e.target.value
+//                 )
+//               }
+//               required
+//             />
+//             <label>
+//               Yes or No:
+//               <input
+//                 type='checkbox'
+//                 checked={category.yesOrNo}
+//                 onChange={(e) =>
+//                   handleConsentCategoryChange(
+//                     index,
+//                     'yesOrNo',
+//                     e.target.checked
+//                   )
+//                 }
+//               />
+//             </label>
+//             <input
+//               type='text'
+//               placeholder='Reason'
+//               value={category.reason}
+//               onChange={(e) =>
+//                 handleConsentCategoryChange(index, 'reason', e.target.value)
+//               }
+//               required
+//             />
+//             <button
+//               type='button'
+//               onClick={() => removeConsentCategory(index)}
+//               className='remove-category-btn'
+//             >
+//               Remove
+//             </button>
+//           </div>
+//         ))}
+//       </div>
+
+//       {/* Form Actions */}
+//       <div className='form-actions'>
+//         <button type='submit' onClick={handleSubmit} className='submit-btn'>
+//           Submit
+//         </button>
+//         <button type='button' onClick={generatePreview} className='preview-btn'>
+//           Generate Preview
+//         </button>
+//       </div>
+//     </form>
+//   );
+// };
+
+// export default CreateBanner;

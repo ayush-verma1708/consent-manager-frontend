@@ -11,7 +11,7 @@ const ConsentCreation = () => {
     backgroundColor: '#ffffff',
     textColor: '#000000',
     buttonColor: '#007bff',
-    languages: ['English'],
+    languages: ['en'],
     consentCategories: [
       {
         title: '',
@@ -65,38 +65,40 @@ const ConsentCreation = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const response = await createBanner(bannerData); // Use the createBanner API function
-      alert(`Banner created successfully: ${response.message}`);
-      setBannerData({
-        text: '',
-        buttonText: '',
-        backgroundColor: '#ffffff',
-        textColor: '#000000',
-        buttonColor: '#007bff',
-        languages: ['English'],
-        consentCategories: [
-          {
-            title: '',
-            description: '',
-            yesOrNo: false,
-            reason: '',
-            consentType: 'accepted',
-          },
-        ],
-        privacyPolicyLink: '',
-        termsLink: '',
-        consentExpiry: 30,
-        granularity: false,
-      });
-      setPreviewBanner(null);
-    } catch (error) {
-      alert(
-        `Error creating banner: ${
-          error.response?.data?.message || error.message
-        }`
-      );
-    }
+    console.log(bannerData);
+    // try {
+    //   console.log(bannerData);
+    //   // const response = await createBanner(bannerData); // Use the createBanner API function
+    //   alert(`Banner created successfully: ${response.message}`);
+    //   setBannerData({
+    //     text: '',
+    //     buttonText: '',
+    //     backgroundColor: '#ffffff',
+    //     textColor: '#000000',
+    //     buttonColor: '#007bff',
+    //     languages: ['English'],
+    //     consentCategories: [
+    //       {
+    //         title: '',
+    //         description: '',
+    //         yesOrNo: false,
+    //         reason: '',
+    //         consentType: 'accepted',
+    //       },
+    //     ],
+    //     privacyPolicyLink: '',
+    //     termsLink: '',
+    //     consentExpiry: 30,
+    //     granularity: false,
+    //   });
+    //   setPreviewBanner(null);
+    // } catch (error) {
+    //   alert(
+    //     `Error creating banner: ${
+    //       error.response?.data?.message || error.message
+    //     }`
+    //   );
+    // }
   };
 
   const generatePreview = () => {
@@ -122,7 +124,7 @@ const ConsentCreation = () => {
         handleSubmit={handleSubmit}
         generatePreview={generatePreview}
       />
-      <BannerPreview previewData={previewBanner} />
+      {/* <BannerPreview previewData={previewBanner} /> */}
     </div>
   );
 };
