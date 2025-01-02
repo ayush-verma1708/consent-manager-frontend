@@ -21,7 +21,7 @@ const demoTemplates = [
       backgroundColor: '#e0f7fa',
       textColor: '#00796b',
       buttonColor: '#004d40',
-      languages: ['English'],
+      languages: ['en'],
       consentCategories: [
         {
           title: 'Analytics Cookies',
@@ -47,7 +47,7 @@ const demoTemplates = [
       backgroundColor: '#ffebee',
       textColor: '#d32f2f',
       buttonColor: '#b71c1c',
-      languages: ['English', 'Malayalam'],
+      languages: ['en', 'bn'],
       consentCategories: [
         {
           title: 'Marketing Cookies',
@@ -74,7 +74,7 @@ const demoTemplates = [
       backgroundColor: '#e8f5e9',
       textColor: '#2e7d32',
       buttonColor: '#1b5e20',
-      languages: ['English'],
+      languages: ['en'],
       consentCategories: [
         {
           title: 'Healthcare Data',
@@ -100,7 +100,7 @@ const demoTemplates = [
       backgroundColor: '#fff3e0',
       textColor: '#f57c00',
       buttonColor: '#e65100',
-      languages: ['English', 'Hindi'],
+      languages: ['en', 'hi'],
       consentCategories: [
         {
           title: 'Shopping Preferences',
@@ -127,7 +127,7 @@ const demoTemplates = [
       backgroundColor: '#e3f2fd',
       textColor: '#1565c0',
       buttonColor: '#0d47a1',
-      languages: ['English', 'Punjabi'],
+      languages: ['en', 'pa'],
       consentCategories: [
         {
           title: 'Security Cookies',
