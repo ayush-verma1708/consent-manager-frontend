@@ -46,6 +46,23 @@ const CreateBanner = ({
     }));
   };
 
+  const handleNestedInputChange = (e) => {
+    const { name, value } = e.target;
+    const keys = name.split('.');
+    setBannerData((prevData) => {
+      const updatedData = { ...prevData };
+      let current = updatedData;
+      for (let i = 0; i < keys.length - 1; i++) {
+        if (!current[keys[i]]) {
+          current[keys[i]] = {};
+        }
+        current = current[keys[i]];
+      }
+      current[keys[keys.length - 1]] = value;
+      return updatedData;
+    });
+  };
+
   const formFields = [
     {
       label: 'Text',
@@ -137,8 +154,18 @@ const CreateBanner = ({
           <input
             type={field.type}
             name={field.name}
-            value={bannerData[field.name] || ''}
-            onChange={handleInputChange}
+            value={
+              field.name.includes('.')
+                ? bannerData[field.name.split('.')[0]]?.[
+                    field.name.split('.')[1]
+                  ] || ''
+                : bannerData[field.name] || ''
+            }
+            onChange={
+              field.name.includes('.')
+                ? handleNestedInputChange
+                : handleInputChange
+            }
             placeholder={field.placeholder}
             required={field.required}
           />

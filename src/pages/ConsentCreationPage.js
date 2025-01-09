@@ -76,95 +76,99 @@ const ConsentCreation = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(bannerData);
-    console.log('consentManagerContact:', bannerData?.consentManagerContact);
 
-    // const {
-    //   languages,
-    //   text,
-    //   buttonText,
-    //   reject_button_Text,
-    //   consentCategories,
-    // } = bannerData;
+    // Ensure consentManagerContact is not undefined
+    if (!bannerData.consentManagerContact) {
+      console.error('consentManagerContact is undefined');
+      return;
+    }
+
+    const {
+      languages,
+      text,
+      buttonText,
+      reject_button_Text,
+      consentCategories,
+    } = bannerData;
 
     // Translate text and buttonText
-    // const translatedText = await translateText(text, languages);
-    // const translatedButtonText = await translateText(buttonText, languages);
-    // const transltedRejectTest = await translateText(
-    //   reject_button_Text,
-    //   languages
-    // );
+    const translatedText = await translateText(text, languages);
+    const translatedButtonText = await translateText(buttonText, languages);
+    const transltedRejectTest = await translateText(
+      reject_button_Text,
+      languages
+    );
 
-    // // Translate consentCategories
-    // const translatedConsentCategories = await Promise.all(
-    //   consentCategories.map(async (category) => ({
-    //     title: await translateText(category.title, languages),
-    //     description: await translateText(category.description, languages),
-    //     reason: await translateText(category.reason, languages),
-    //     yesOrNo: category.yesOrNo,
-    //     consentType: category.consentType,
-    //   }))
-    // );
+    // Translate consentCategories
+    const translatedConsentCategories = await Promise.all(
+      consentCategories.map(async (category) => ({
+        title: await translateText(category.title, languages),
+        description: await translateText(category.description, languages),
+        reason: await translateText(category.reason, languages),
+        yesOrNo: category.yesOrNo,
+        consentType: category.consentType,
+      }))
+    );
 
     // Format the data before submission
-    // const formattedSubmission = {
-    //   text: translatedText.map((t, idx) => ({
-    //     language: languages[idx],
-    //     value: t.value ? t.value : String(t),
-    //   })),
-    //   buttonText: translatedButtonText.map((t, idx) => ({
-    //     language: languages[idx],
-    //     value: t.value ? t.value : String(t),
-    //   })),
+    const formattedSubmission = {
+      text: translatedText.map((t, idx) => ({
+        language: languages[idx],
+        value: t.value ? t.value : String(t),
+      })),
+      buttonText: translatedButtonText.map((t, idx) => ({
+        language: languages[idx],
+        value: t.value ? t.value : String(t),
+      })),
 
-    //   reject_button_Text: transltedRejectTest.map((t, idx) => ({
-    //     language: languages[idx],
-    //     value: t.value ? t.value : String(t),
-    //   })),
+      reject_button_Text: transltedRejectTest.map((t, idx) => ({
+        language: languages[idx],
+        value: t.value ? t.value : String(t),
+      })),
 
-    //   consentCategories: translatedConsentCategories.map((category) => ({
-    //     title: category.title.map((t, idx) => ({
-    //       language: languages[idx],
-    //       value: t.value ? t.value : String(t), // Ensure value is a string, extracting the 'value' property
-    //     })),
-    //     description: category.description.map((t, idx) => ({
-    //       language: languages[idx],
-    //       value: t.value ? t.value : String(t), // Ensure value is a string, extracting the 'value' property
-    //     })),
-    //     reason: category.reason.map((t, idx) => ({
-    //       language: languages[idx],
-    //       value: t.value ? t.value : String(t), // Ensure value is a string, extracting the 'value' property
-    //     })),
-    //     yesOrNo: category.yesOrNo,
-    //     consentType: category.consentType,
-    //   })),
-    //   backgroundColor: bannerData.backgroundColor,
-    //   textColor: bannerData.textColor,
-    //   buttonColor: bannerData.buttonColor,
-    //   privacyPolicyLink: bannerData.privacyPolicyLink,
-    //   termsLink: bannerData.termsLink,
-    //   consentExpiry: bannerData.consentExpiry,
-    //   granularity: bannerData.granularity,
-    //   // Handling the DPO and Consent Manager contacts
-    //   // dpoContact: {
-    //   //   name: bannerData.dpoContact.name,
-    //   //   email: bannerData.dpoContact.email,
-    //   // },
-    //   // consentManagerContact: {
-    //   //   name: bannerData.consentManagerContact.name,
-    //   //   email: bannerData.consentManagerContact.email,
-    //   // },
-    // };
+      consentCategories: translatedConsentCategories.map((category) => ({
+        title: category.title.map((t, idx) => ({
+          language: languages[idx],
+          value: t.value ? t.value : String(t), // Ensure value is a string, extracting the 'value' property
+        })),
+        description: category.description.map((t, idx) => ({
+          language: languages[idx],
+          value: t.value ? t.value : String(t), // Ensure value is a string, extracting the 'value' property
+        })),
+        reason: category.reason.map((t, idx) => ({
+          language: languages[idx],
+          value: t.value ? t.value : String(t), // Ensure value is a string, extracting the 'value' property
+        })),
+        yesOrNo: category.yesOrNo,
+        consentType: category.consentType,
+      })),
+      backgroundColor: bannerData.backgroundColor,
+      textColor: bannerData.textColor,
+      buttonColor: bannerData.buttonColor,
+      privacyPolicyLink: bannerData.privacyPolicyLink,
+      termsLink: bannerData.termsLink,
+      consentExpiry: bannerData.consentExpiry,
+      granularity: bannerData.granularity,
+      // Handling the DPO and Consent Manager contacts
+      dpoContact: {
+        name: bannerData.dpoContact?.name,
+        email: bannerData.dpoContact?.email,
+      },
+      consentManagerContact: {
+        name: bannerData.consentManagerContact?.name,
+        email: bannerData.consentManagerContact?.email,
+      },
+    };
 
-    // console.log('Formatted Submission:', formattedSubmission);
+    console.log('Formatted Submission:', formattedSubmission);
 
-    // // Send the data to the backend
-    // try {
-    //   const response = await createBanner(formattedSubmission);
-    //   console.log('Banner created successfully:', response);
-    // } catch (error) {
-    //   console.error('Error during submission:', error);
-    // }
+    // Send the data to the backend
+    try {
+      const response = await createBanner(formattedSubmission);
+      console.log('Banner created successfully:', response);
+    } catch (error) {
+      console.error('Error during submission:', error);
+    }
   };
 
   const generatePreview = () => {
